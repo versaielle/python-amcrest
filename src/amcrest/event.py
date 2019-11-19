@@ -130,6 +130,7 @@ class Event(object):
         StorageFailure: storage failure event
         StorageLowSpace: storage low space event
         AlarmOutput: alarm output event
+        AudioMutation: audio mutation event
         """
         ret = self.command(
             'eventManager.cgi?action=getEventIndexes&code={0}'.format(
@@ -140,6 +141,13 @@ class Event(object):
     @property
     def is_motion_detected(self):
         event = self.event_channels_happened('VideoMotion')
+        if 'channels' not in event:
+            return False
+        return True
+    
+    @property
+    def is_sound_detected(self):
+        event = self.event_channels_happened('AudioMutation')
         if 'channels' not in event:
             return False
         return True

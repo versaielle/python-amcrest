@@ -28,6 +28,7 @@ from .network import Network
 from .ptz import Ptz
 from .record import Record
 from .snapshot import Snapshot
+from .sound_detection import SoundDetection
 from .special import Special
 from .storage import Storage
 from .system import System
@@ -42,7 +43,7 @@ _LOGGER = logging.getLogger(__name__)
 # pylint: disable=too-many-ancestors
 class Http(System, Network, MotionDetection, Snapshot,
            UserManagement, Event, Audio, Record, Video,
-           Log, Ptz, Special, Storage, Nas):
+           Log, Ptz, Special, Storage, Nas, SoundDetection):
 
     def __init__(self, host, port, user,
                  password, verbose=True, protocol='http', ssl_verify=True,
@@ -90,9 +91,9 @@ class Http(System, Network, MotionDetection, Snapshot,
             except LoginError as error:
                 self._token = None
                 raise error
-        except CommError:
-            self._token = None
-            raise
+            except CommError:
+                self._token = None
+                raise
 
         # check if user passed
         result = resp.lower()
